@@ -11,7 +11,7 @@ export const Container = () => {
 
         const fetchData = async () => {
             try {
-                axios.get(`http://localhost:5269/games/1`)
+                axios.get(`${process.env.API_URL}/games/1`)
                 .then(res => {
                     setCards(() => res.data)
                 })
