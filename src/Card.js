@@ -70,7 +70,7 @@ export const Card = ({ id, name, index, moveCard, coverid }) => {
   return (
     <div ref={ref} style={{ ...style, opacity }} data-handler-id={handlerId}>
  
-      <img src={"http://localhost:5269/images?igdbimageid=" + coverid} alt={name} height="100"  />
+      <img src={`${process.env.API_URL}/images?igdbimageid=` + coverid} alt={name} height="100"  />
     </div>
   )
 }
