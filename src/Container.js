@@ -2,29 +2,50 @@ import update from 'immutability-helper'
 import { useCallback, useState, useEffect } from 'react'
 import { Card } from './Card.js'
 import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5269';
+
 const style = {
   width: 70,
 }
+
 export const Container = () => {
   {
-    useEffect(() => {
+    const [cards, setCards] = useState([])
 
+    useEffect(() => {
         const fetchData = async () => {
             try {
-                axios.get(`${process.env.REACT_APP_API_URL}/games/1`)
+                axios.get(`${API_URL}/games/1`)
                 .then(res => {
                     setCards(() => res.data)
                 })
             } catch (err) {
-            } finally {
+                console.error('Error fetching games:', err);
             }
           };
       
           fetchData();
-      }, []); // The effect will run only if count changes   
-    
+      }, []); 
 
-    const [cards, setCards] = useState([])
+    const handleSubmitVotes = async () => {
+      var userid = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
+      const votingData = cards.map((card, index) => ({
+        BallotId: 1,
+        GameId: card.id,
+        UserId: userid,
+        Rank: index + 1
+      }));
+
+      try {
+        await axios.post(`${API_URL}/votes`, votingData);
+        alert('Votes submitted successfully!');
+      } catch (error) {
+        console.error('Error submitting votes:', error);
+        alert('Failed to submit votes');
+      }
+    };
+
     const moveCard = useCallback((dragIndex, hoverIndex) => {
       setCards((prevCards) =>
         update(prevCards, {
@@ -54,7 +75,7 @@ export const Container = () => {
     return (
       <>
         <div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
-        <button onClick={() => console.log(cards)}>Log</button>
+        <button onClick={handleSubmitVotes}>Submit Votes</button>
       </>
     )
   }
