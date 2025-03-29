@@ -3,7 +3,7 @@ import { useCallback, useState, useEffect } from 'react'
 import { Card } from './Card.js'
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5269';
+const API_URL = process.env.REACT_APP_API_BASE_URL || 'https://annoyedvotingapi-d7e9c0emgxhhb6cr.canadacentral-01.azurewebsites.net';
 
 const style = {
   width: 70,
