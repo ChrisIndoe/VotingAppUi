@@ -16,7 +16,7 @@ export const Container = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                axios.get(`${API_URL}/games/1`)
+                axios.get(`${API_URL}/games/2`)
                 .then(res => {
                     setCards(() => res.data)
                 })
