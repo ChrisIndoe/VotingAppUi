@@ -12,21 +12,28 @@ const style = {
 export const Container = () => {
   {
     const [cards, setCards] = useState([])
-
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                axios.get(`${API_URL}/games/2`)
-                .then(res => {
-                    setCards(() => res.data)
-                })
-            } catch (err) {
-                console.error('Error fetching games:', err);
-            }
-          };
+            const fetchData = async () => {
+                try {
+                    setLoading(true)
+                    
+                    const ballotId = 2;
+                    const response = await axios.get(`${API_URL}/games/${ballotId}`, { timeout: 5000 })
+                    setCards(response.data)
+                    setError(null)
+                } catch (err) {
+                    console.error('Error fetching games:', err);
+                    setError('Failed to load games. Please try again later.')
+                } finally {
+                    setLoading(false)
+                }
+            };
       
-          fetchData();
-      }, []); 
+        fetchData();
+    }, []); 
+
 
     const handleSubmitVotes = async () => {
       var userid = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
@@ -72,6 +79,15 @@ export const Container = () => {
         />
       )
     }, [])
+
+    if (loading) {
+      return <div>Loading games...</div>
+    }
+
+    if (error) {
+      return <div>{error}</div>
+    }
+
     return (
       <>
         <div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
